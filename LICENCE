@@ -1,5 +1,4 @@
-/*
- *                                The MIT License
+                               The MIT License
 
 Copyright (c) 2012 Alexander Kuprin 
 
@@ -21,25 +20,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
- */
-
-/*
- * Original based on lift-mongodb-record
- * And lift-record
- */
-
-package net.indoorlabs.neo4j
-package record
-package field
-
-import net.liftweb.record.field._
-
-class Neo4jCountryField[OwnerType <: Neo4jRecord[OwnerType]](rec: OwnerType)
-  extends Neo4jEnumField(rec, Countries) {
-
-}
-
-class Neo4jOptionalCountryField[OwnerType <: Neo4jRecord[OwnerType]](rec: OwnerType)
-  extends Neo4jOptionalEnumField(rec, Countries) {
-
-}
