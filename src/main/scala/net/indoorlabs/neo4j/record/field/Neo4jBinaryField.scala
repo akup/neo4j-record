@@ -56,7 +56,7 @@ import java.io.FileInputStream
 import net.liftweb.http.SHtml
 import net.liftmodules.AjaxFileUpload._
 
-//TODO: close stream on grabage collection
+//TODO: close stream on garbage collection ?
 trait ByteArrayTypedField extends TypedField[Array[Byte]] {
   protected var _id: Box[ObjectId] = Empty
   protected var _bindata: Box[Array[Byte]] = Empty
@@ -69,10 +69,16 @@ trait ByteArrayTypedField extends TypedField[Array[Byte]] {
   private def elem_ajax(pl: Option[ProgressListener], options: Option[FileSHtml.UploadOptions], attrs: SHtml.ElemAttr*) =
       FileSHtml.ajaxFileUpload((fph: FileParamHolder) => {this.setFromAny(fph); Noop}, pl, options, attrs: _*)
 
+  override def toForm: Box[NodeSeq] =
+    uniqueFieldId match {
+      case Full(id) => Full(elem("id" -> id))
+      case _ => Full(elem())
+    }
+  
   def toForm(ajax: Boolean, pl: Option[ProgressListener] = None, options: Option[FileSHtml.UploadOptions] = None): Box[NodeSeq] =
     uniqueFieldId match {
       case Full(id) => Full(if (!ajax) elem("id" -> id) else elem_ajax(pl, options, "id" -> id))
-      case _ => Full(elem())
+      case _ => Full(if (!ajax) elem() else elem_ajax(pl, options))
     }
 
   def id = _id
@@ -159,9 +165,6 @@ trait ByteArrayTypedField extends TypedField[Array[Byte]] {
       }
     }
   }
-
-  //TODO: add to form with progress bar
-  def toForm: Box[NodeSeq] = Empty
 
   implicit private def stream_to_array(is: InputStream): Array[Byte] =
       (Stream.continually(is.read).takeWhile(-1 !=).map(_.toByte).toArray)
