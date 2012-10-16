@@ -9,6 +9,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
+  <groupId>net.indoorlabs</groupId>
   <artifactId>neo4j_${scala.version}</artifactId>
   <version>${neo4j-record.version}</version>
   <packaging>jar</packaging>
