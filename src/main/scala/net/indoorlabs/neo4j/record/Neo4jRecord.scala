@@ -151,8 +151,10 @@ trait Neo4jRecord[MyType <: Neo4jRecord[MyType]] extends Record[MyType] {
     val links = linkNames.map(meta.linkByName(_, this)).filter(!_.isEmpty).map(_.get)
 
     val json1 = meta.asJValueNoLinks(this)
-    val json2 = meta.asJValueNoLinks(that)
+    val json2: JValue = meta.asJValueNoLinks(that)
+    
     val d = json1.diff(json2)
+    //TODO: incorrect diff if some fields are optional
 
     //val ch = d.changed
     val changed = if(d.changed == JNothing) List[JField]()

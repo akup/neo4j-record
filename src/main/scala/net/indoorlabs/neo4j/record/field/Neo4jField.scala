@@ -50,12 +50,15 @@ trait Neo4jField[MyType, OwnerType <: Neo4jRecord[OwnerType]] extends Field[MyTy
     else getNodeValueBox.flatMap(obscure)
   }
 
-  protected def getNodeValueBox: Box[MyType] = owner.node match {
-    case Full(n) => n(name) match {
-      case Some(prop) => propToBoxMyType(prop)
+  protected def getNodeValueBox: Box[MyType] = {
+    val f_val = owner.node match {
+      case Full(n) => n(name) match {
+        case Some(prop) => propToBoxMyType(prop)
+        case _ => Empty
+      }
       case _ => Empty
     }
-    case _ => Empty
+    if (f_val.isEmpty) super.valueBox else f_val
   }
 
   protected def propToBoxMyType(p: Any): Box[MyType]
